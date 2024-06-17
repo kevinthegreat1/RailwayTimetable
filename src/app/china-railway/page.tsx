@@ -1,7 +1,21 @@
-import RouteEntry from "@/components/route-entry";
+"use client";
 
-export default async function Timetable() {
-  const stationsString = await fetch("https://kyfw.12306.cn/otn/resources/js/framework/station_name.js"); // TODO useEffect or useData or static route handler (probably route handler)
+import {useEffect, useState} from "react";
+import RouteEntry from "@/components/route-entry";
+import {StationNames} from "@/types";
+
+export default function Timetable() {
+  const [stationNames, setStationNames] = useState<StationNames>([]);
+
+  useEffect(() => {
+    async function fetchStationNames() {
+      const stationNamesResponse = await fetch("/china-railway/station-names");
+      setStationNames(await stationNamesResponse.json());
+    }
+
+    // noinspection JSIgnoredPromiseFromCall
+    fetchStationNames();
+  }, []);
 
   return (
     <main className="h-dvh bg-sky-50">
