@@ -13,3 +13,20 @@ export type StationName = {
 }
 
 export type StationNames = StationName[];
+
+export type Route = {
+  fromStation: string,
+  fromStationCode?: string,
+  toStation: string,
+  toStationCode?: string,
+}
+
+export type DatedRoute = Route & {
+  date: string,
+}
+
+export type RouteToSearch = Route & {
+  bothWays: boolean,
+}
+
+export type RoutesToSearch = RouteToSearch[];

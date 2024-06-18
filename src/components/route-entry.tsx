@@ -1,28 +1,41 @@
+import {ChangeEventHandler} from "react";
+
 export type RouteEntryProps = {
+  fromStationLabel?: string,
   fromStationText?: string,
+  fromStationTextCallback: ChangeEventHandler<HTMLInputElement>,
+  fromStationName?: string,
+  toStationLabel?: string,
   toStationText?: string,
-  date?: boolean
-  bothWayOption?: boolean
+  toStationTextCallback: ChangeEventHandler<HTMLInputElement>,
+  toStationName?: string,
+  date?: string
+  dateCallback?: ChangeEventHandler<HTMLInputElement>,
+  bothWaysOption?: boolean,
+  bothWays?: boolean,
+  bothWaysCallback?: ChangeEventHandler<HTMLInputElement>,
 };
 
-export default function RouteEntry({fromStationText = "出发地", toStationText = "目的地", date = false, bothWayOption = false}: RouteEntryProps) {
+export default function RouteEntry({fromStationLabel = "出发地", fromStationText = "", fromStationTextCallback, fromStationName, toStationLabel = "目的地", toStationText = "", toStationTextCallback, toStationName, date, dateCallback = () => {}, bothWaysOption = false, bothWays = true, bothWaysCallback = () => {}}: RouteEntryProps) {
   return (
     <div className="flex justify-around">
       <div className="flex flex-col items-center">
-        <label htmlFor="fromStation">{fromStationText}</label>
-        <input id="fromStation" className="px-1 rounded-lg"></input>
+        <label htmlFor="fromStation">{fromStationLabel}</label>
+        <input id="fromStation" value={fromStationText} onChange={fromStationTextCallback} className="px-1 rounded-lg"></input>
+        <div>{fromStationName}</div>
       </div>
       <div className="flex flex-col items-center">
-        <label htmlFor="toStation">{toStationText}</label>
-        <input id="toStation" className="px-1 rounded-lg"></input>
+        <label htmlFor="toStation">{toStationLabel}</label>
+        <input id="toStation" value={toStationText} onChange={toStationTextCallback} className="px-1 rounded-lg"></input>
+        <div>{toStationName}</div>
       </div>
       {date && <div className="flex flex-col items-center">
-        <label htmlFor="date">日期</label>
-        <input id="date" className="px-1 rounded-lg" placeholder={new Date().toISOString().split('T')[0]}></input>
+          <label htmlFor="date">日期</label>
+          <input id="date" value={date} onChange={dateCallback} className="px-1 rounded-lg" placeholder={new Date().toISOString().split('T')[0]}></input>
       </div>}
-      {bothWayOption && <div className="flex flex-col items-center">
-        <label htmlFor="bothWay">双向</label>
-        <input id="bothWay" type="checkbox" checked={true} className="m-2"/>
+      {bothWaysOption && <div className="flex flex-col items-center">
+          <label htmlFor="bothWay">双向</label>
+          <input id="bothWay" type="checkbox" checked={bothWays} onChange={bothWaysCallback} className="m-2"/>
       </div>}
     </div>
   )
