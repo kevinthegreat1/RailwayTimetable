@@ -19,14 +19,27 @@ export type Route = {
   fromStationCode?: string,
   toStation: string,
   toStationCode?: string,
+  bothWays: boolean,
 }
 
 export type DatedRoute = Route & {
   date: string,
 }
 
-export type RouteToSearch = Route & {
-  bothWays: boolean,
+export type Routes = Route[];
+
+export type TrainStop = {
+  arrive_time: string,
+  station_name: string,
+  isChina: string,
+  start_time: string,
+  stopover_time: string,
+  station_no: string,
+  country_code: string,
+  country_name: string,
+  isEnabled: boolean,
 }
 
-export type RoutesToSearch = RouteToSearch[];
+export type TrainStops = TrainStop[];
+
+export type Trains = TrainStops[];

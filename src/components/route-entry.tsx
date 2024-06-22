@@ -16,7 +16,7 @@ export type RouteEntryProps = {
   bothWaysCallback?: ChangeEventHandler<HTMLInputElement>,
 };
 
-export default function RouteEntry({fromStationLabel = "出发地", fromStationText = "", fromStationTextCallback, fromStationName, toStationLabel = "目的地", toStationText = "", toStationTextCallback, toStationName, date, dateCallback = () => {}, bothWaysOption = false, bothWays = true, bothWaysCallback = () => {}}: RouteEntryProps) {
+export default function RouteEntry({fromStationLabel = "出发地", fromStationText = "", fromStationTextCallback, fromStationName, toStationLabel = "目的地", toStationText = "", toStationTextCallback, toStationName, date, dateCallback = () => {}, bothWaysOption = true, bothWays = true, bothWaysCallback = () => {}}: RouteEntryProps) {
   return (
     <div className="flex justify-around">
       <div className="flex flex-col items-center">
