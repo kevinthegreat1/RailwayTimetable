@@ -28,6 +28,34 @@ export type DatedRoute = Route & {
 
 export type Routes = Route[];
 
+export type TrainSummary = {
+  arrive_time: string,
+  controlled_train_flag: string,
+  controlled_train_message: string,
+  day_difference: string,
+  end_station_telecode: string,
+  exchange_train_flag: string,
+  flag: string,
+  from_station_name: string,
+  from_station_telecode: string,
+  houbu_train_flag: string,
+  is_support_card: string,
+  lishi: string,
+  location_code: string,
+  message: string,
+  start_station_telecode: string,
+  start_time: string,
+  start_train_date: string,
+  station_train_code: string,
+  to_station_name: string,
+  to_station_telecode: string,
+  train_no: string,
+  yp_ex: string,
+  yp_info: string,
+  yp_info_cover: string,
+  yp_info_coverFlag: string,
+}
+
 export type TrainStop = {
   arrive_time: string,
   station_name: string,

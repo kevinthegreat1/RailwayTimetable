@@ -18,7 +18,7 @@ export type RouteEntryProps = {
 
 export default function RouteEntry({fromStationLabel = "出发地", fromStationText = "", fromStationTextCallback, fromStationName, toStationLabel = "目的地", toStationText = "", toStationTextCallback, toStationName, date, dateCallback = () => {}, bothWaysOption = true, bothWays = true, bothWaysCallback = () => {}}: RouteEntryProps) {
   return (
-    <div className="flex justify-around">
+    <div className="flex justify-around flex-wrap gap-2">
       <div className="flex flex-col items-center">
         <label htmlFor="fromStation">{fromStationLabel}</label>
         <input id="fromStation" value={fromStationText} onChange={fromStationTextCallback} className="px-1 rounded-lg"></input>
