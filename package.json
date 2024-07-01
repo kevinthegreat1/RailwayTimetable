@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@types/lodash.uniqby": "^4.7.9",
+    "@types/toposort": "^2.0.7",
     "lodash.uniqby": "^4.7.0",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "toposort": "^2.0.2"
   },
   "devDependencies": {
     "@types/node": "^20",
