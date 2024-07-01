@@ -1,12 +1,13 @@
 "use client";
 
 import {useEffect, useState} from "react";
-import {StationNames, Trains} from "@/types";
+import {DatedRoute, StationNames, Trains} from "@/types";
 import {RoutesForm} from "@/components/routes-form";
 import {Timetable} from "@/components/timetable";
 import {TrainSummaries} from "@/components/train-summaries";
 import {Loading} from "@/components/loading";
 import {isLoaded} from "@/utils/train";
+import {sortStations} from "@/utils/sort-stations";
 
 export default function TimetablePage() {
   const [stationNames, setStationNames] = useState<StationNames>([]);
@@ -20,9 +21,14 @@ export default function TimetablePage() {
     fetchStationNames();
   }, []);
 
+  const [timetableRoute, setTimetableRoute] = useState<DatedRoute>({bothWays: true, date: new Date().toISOString().split('T')[0]} as DatedRoute);
+
   const [trains, setTrains] = useState<Trains>([]);
   const [loadTrainSummaries, setLoadTrainSummaries] = useState<boolean>(false);
   const [generateTimetable, setGenerateTimetable] = useState<boolean>(false);
+
+  const sortedStations = sortStations(stationNames, timetableRoute, trains);
+  console.log("Sorted Stations:", sortedStations); // todo: test
 
   if (generateTimetable) {
     if (trains && trains.every(isLoaded)) {
@@ -47,7 +53,7 @@ export default function TimetablePage() {
   } else {
     return (
       <main className="min-h-screen bg-sky-50">
-        <RoutesForm setLoadTrainSummaries={setLoadTrainSummaries} stationNames={stationNames} setTrains={setTrains}/>
+        <RoutesForm timetableRoute={timetableRoute} setTimetableRoute={setTimetableRoute} setLoadTrainSummaries={setLoadTrainSummaries} stationNames={stationNames} setTrains={setTrains}/>
       </main>
     )
   }

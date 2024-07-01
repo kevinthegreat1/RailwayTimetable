@@ -8,13 +8,14 @@ import {getStationCode, getStationName} from "@/utils/station-names";
 import {sleep} from "@/utils/sleep";
 
 export type RoutesFormProps = {
+  timetableRoute: DatedRoute,
+  setTimetableRoute: (timetableRoute: DatedRoute) => void,
   setLoadTrainSummaries: (loading: boolean) => void,
   stationNames: StationNames,
   setTrains: (trains: Trains) => void
 }
 
-export function RoutesForm({setLoadTrainSummaries, stationNames, setTrains}: RoutesFormProps) {
-  const [timetableRoute, setTimetableRoute] = useState<DatedRoute>({bothWays: true, date: new Date().toISOString().split('T')[0]} as DatedRoute);
+export function RoutesForm({timetableRoute, setTimetableRoute, setLoadTrainSummaries, stationNames, setTrains}: RoutesFormProps) {
   const [routesToSearch, setRoutesToSearch] = useState<Routes>([{bothWays: true} as Route]);
 
   function getStationTextCallback(toStation: boolean, index: number) {
