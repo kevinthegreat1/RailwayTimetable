@@ -70,4 +70,9 @@ export type TrainStop = {
 
 export type TrainStops = TrainStop[];
 
-export type Trains = TrainStops[];
+export type Train = {
+  trainSummary: TrainSummary,
+  trainStops: TrainStops,
+}
+
+export type Trains = Train[];

@@ -1,4 +1,4 @@
-import {DatedRoute, Route, Routes, StationNames, Trains, TrainSummary} from "@/types";
+import {DatedRoute, Route, Routes, StationNames, Trains, TrainStops, TrainSummary} from "@/types";
 import {ChangeEvent, useState} from "react";
 import {RequestConfigTrainsToday, requestConfigTrainsToday} from "@/utils/cr-trains-request-config";
 import {RequestDataTrains, requestDataTrainsOtherDay, requestDataTrainsToday} from "@/utils/cr-trains-request-data";
@@ -8,13 +8,12 @@ import {getStationCode, getStationName} from "@/utils/station-names";
 import {sleep} from "@/utils/sleep";
 
 export type RoutesFormProps = {
-  setLoadingTrainSummaries: (loading: boolean) => void,
+  setLoadTrainSummaries: (loading: boolean) => void,
   stationNames: StationNames,
-  setTrainSummaries: (trainSummaries: TrainSummary[]) => void,
   setTrains: (trains: Trains) => void
 }
 
-export function RoutesForm({setLoadingTrainSummaries, stationNames, setTrainSummaries, setTrains}: RoutesFormProps) {
+export function RoutesForm({setLoadTrainSummaries, stationNames, setTrains}: RoutesFormProps) {
   const [timetableRoute, setTimetableRoute] = useState<DatedRoute>({bothWays: true, date: new Date().toISOString().split('T')[0]} as DatedRoute);
   const [routesToSearch, setRoutesToSearch] = useState<Routes>([{bothWays: true} as Route]);
 
@@ -63,7 +62,7 @@ export function RoutesForm({setLoadingTrainSummaries, stationNames, setTrainSumm
   }
 
   function submitRoutes() {
-    setLoadingTrainSummaries(true);
+    setLoadTrainSummaries(true);
     const date = timetableRoute.date.replaceAll('-', '');
     if (date === new Date().toISOString().split('T')[0].replaceAll('-', '')) {
       getTrainsForAllRoutes("com.cars.otsmobile.trainTimeTable.queryCurrentDayLeftTicket", requestConfigTrainsToday, requestDataTrainsToday, date);
@@ -87,9 +86,9 @@ export function RoutesForm({setLoadingTrainSummaries, stationNames, setTrainSumm
       });
 
     Promise.all(promises).then(async routes => {
-      const trainSummaries = uniqby((await Promise.all(routes.map(route => route.result.ticketResult))).flat(), "train_no");
-      setTrainSummaries(trainSummaries);
-      return getTrainsDetails(trainSummaries);
+      const trains: Trains = uniqby((await Promise.all(routes.map(route => route.result.ticketResult))).flat(), "train_no").map(trainSummary => ({trainSummary, trainStops: []}));
+      setTrains(trains);
+      return getTrainsDetails(trains);
     });
   }
 
@@ -108,17 +107,16 @@ export function RoutesForm({setLoadingTrainSummaries, stationNames, setTrainSumm
     return await (await fetch(`/china-railway/trains?operationType=${operationType}&requestData=${encodeURIComponent(JSON.stringify(requestData))}`, requestConfig)).json();
   }
 
-  async function getTrainsDetails(trains: TrainSummary[]) {
-    const promises = [];
+  async function getTrainsDetails(trains: Trains) {
     for (const train of trains) {
-      promises.push(getTrainDetails(train));
+      trains.find(t => t.trainSummary.train_no === train.trainSummary.train_no)!.trainStops = await getTrainDetails(train.trainSummary);
+      setTrains([...trains]);
       await sleep(500);
     }
-    Promise.all(promises).then(trains => setTrains(trains.map(train => train.data.data)));
   }
 
-  async function getTrainDetails(train: TrainSummary) {
-    return await (await fetch(`/china-railway/train-stops?train_no=${train.train_no}&from_station_telecode=${train.from_station_telecode}&to_station_telecode=${train.to_station_telecode}&depart_date=${train.start_train_date.substring(0, 4)}-${train.start_train_date.substring(4, 6)}-${train.start_train_date.substring(6)}`)).json();
+  async function getTrainDetails(trainSummary: TrainSummary): Promise<TrainStops> {
+    return (await (await fetch(`/china-railway/train-stops?train_no=${trainSummary.train_no}&from_station_telecode=${trainSummary.from_station_telecode}&to_station_telecode=${trainSummary.to_station_telecode}&depart_date=${trainSummary.start_train_date.substring(0, 4)}-${trainSummary.start_train_date.substring(4, 6)}-${trainSummary.start_train_date.substring(6)}`)).json()).data.data;
   }
 
   return (
