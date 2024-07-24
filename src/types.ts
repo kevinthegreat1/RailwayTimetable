@@ -76,3 +76,8 @@ export type Train = {
 }
 
 export type Trains = Train[];
+
+export type Station = {
+  stationName: string,
+  enabled: boolean
+}

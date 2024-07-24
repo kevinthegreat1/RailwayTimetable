@@ -11,9 +11,13 @@
   "dependencies": {
     "@types/lodash.uniqby": "^4.7.9",
     "@types/toposort": "^2.0.7",
+    "chart.js": "^4.4.3",
+    "chartjs-adapter-dayjs-4": "^1.0.4",
+    "dayjs": "^1.11.11",
     "lodash.uniqby": "^4.7.0",
     "next": "14.2.4",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "tailwind-scrollbar-hide": "^1.1.7",
     "toposort": "^2.0.2"

@@ -28,17 +28,16 @@ export default function TimetablePage() {
   const [generateTimetable, setGenerateTimetable] = useState<boolean>(false);
 
   const sortedStations = sortStations(stationNames, timetableRoute, trains);
-  console.log("Sorted Stations:", sortedStations); // todo: test
 
   if (generateTimetable) {
-    if (trains && trains.every(isLoaded)) {
+    if (trains && trains.every(isLoaded) && sortedStations) {
       return (
         <main className="min-h-screen bg-sky-50">
-          <Timetable trains={trains}/>
+          <Timetable trains={trains} sortedStations={sortedStations} key={sortedStations.join(',')}/> {/* Pass a key to ensure the station enabled states are reset in timetable for every different list of sorted stations. */}
         </main>
       )
     } else {
-      return <Loading/>
+      return <Loading loadingText={`${trains.filter(isLoaded).length}/${trains.length}列`}/>
     }
   } else if (loadTrainSummaries) {
     if (trains && trains.length) {

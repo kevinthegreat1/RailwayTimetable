@@ -8,7 +8,7 @@ import {DatedRoute, StationNames, Trains, TrainStops} from "@/types";
  */
 export function sortStations(stationNames: StationNames, timetableRoute: DatedRoute, trains: Trains) {
   if (!trains || !trains.length) {
-    return;
+    return [];
   }
   // Create a graph of stations
   const stationsGraph: [string, string][] = [];
@@ -17,10 +17,10 @@ export function sortStations(stationNames: StationNames, timetableRoute: DatedRo
     let trainStops;
     if (train.trainSummary.from_station_telecode === timetableRoute.fromStationCode && train.trainSummary.to_station_telecode === timetableRoute.toStationCode) {
       // Train stops are already in the correct order
-      trainStops = train.trainStops;
+      trainStops = trimStops(stationNames, train.trainStops, timetableRoute);
     } else if (train.trainSummary.from_station_telecode === timetableRoute.toStationCode && train.trainSummary.to_station_telecode === timetableRoute.fromStationCode) {
       // Train stops are in the reverse order
-      trainStops = train.trainStops.toReversed();
+      trainStops = trimStops(stationNames, train.trainStops.toReversed(), timetableRoute);
     }
     if (!trainStops) {
       continue;
@@ -32,6 +32,10 @@ export function sortStations(stationNames: StationNames, timetableRoute: DatedRo
   const allSortedStations = toposort(stationsGraph);
   // Only keep stations between the "from" and "to" stations
   return allSortedStations.slice(allSortedStations.indexOf(getStationName(stationNames, timetableRoute.fromStationCode)!), allSortedStations.lastIndexOf(getStationName(stationNames, timetableRoute.toStationCode)!) + 1);
+}
+
+function trimStops(stationNames: StationNames, trainStops: TrainStops, timetableRoute: DatedRoute) {
+  return trainStops.slice(trainStops.findIndex(trainStop => trainStop.station_name === getStationName(stationNames, timetableRoute.fromStationCode)), trainStops.findLastIndex(trainStop => trainStop.station_name === getStationName(stationNames, timetableRoute.toStationCode)) + 1);
 }
 
 /**
