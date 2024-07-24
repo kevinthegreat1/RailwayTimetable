@@ -33,7 +33,7 @@ export default function TimetablePage() {
     if (trains && trains.every(isLoaded) && sortedStations) {
       return (
         <main className="min-h-screen bg-sky-50">
-          <Timetable trains={trains} sortedStations={sortedStations} key={sortedStations.join(',')}/> {/* Pass a key to ensure the station enabled states are reset in timetable for every different list of sorted stations. */}
+          <Timetable date={timetableRoute.date} trains={trains} sortedStations={sortedStations} key={sortedStations.join(',')}/> {/* Pass a key to ensure the station enabled states are reset in timetable for every different list of sorted stations. */}
         </main>
       )
     } else {

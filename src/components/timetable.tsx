@@ -4,10 +4,10 @@ import {CategoryScale, Chart, ChartData, ChartOptions, LineElement, PointElement
 import {Line} from "react-chartjs-2";
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm"
 
-type TimetableProps = { trains: Trains, sortedStations: string[] };
+type TimetableProps = { date: string, trains: Trains, sortedStations: string[] };
 type TrainStopData = { stationName: string, time: string };
 
-export function Timetable({trains, sortedStations}: TimetableProps) {
+export function Timetable({date, trains, sortedStations}: TimetableProps) {
   Chart.register(CategoryScale, LineElement, PointElement, TimeScale);
 
   const [stations, setStations] = useState<Station[]>(sortedStations.map(stationName => ({stationName, enabled: true})));
@@ -30,6 +30,8 @@ export function Timetable({trains, sortedStations}: TimetableProps) {
           return times;
         }),
         borderColor: "rgb(64,64,64)",
+        borderWidth: 1,
+        pointRadius: 0,
       }
     })
   }
@@ -57,6 +59,9 @@ export function Timetable({trains, sortedStations}: TimetableProps) {
   };
 
   return (
-    <Line data={data} options={options}></Line>
+    <div className="h-dvh flex flex-col items-center p-4 gap-4">
+      <div className="text-xl">{date}</div>
+      <Line data={data} options={options}></Line>
+    </div>
   )
 }
