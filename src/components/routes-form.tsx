@@ -87,7 +87,7 @@ export function RoutesForm({timetableRoute, setTimetableRoute, setLoadTrainSumma
       });
 
     Promise.all(promises).then(async routes => {
-      const trains: Trains = uniqby((await Promise.all(routes.map(route => route.result.ticketResult))).flat(), "train_no").map(trainSummary => ({trainSummary, trainStops: []}));
+      const trains: Trains = uniqby((await Promise.all(routes.map(route => route.result.ticketResult))).flat(), "train_no").map(trainSummary => ({trainSummary, trainStops: [], enabled: true}));
       setTrains(trains);
       return getTrainsDetails(trains);
     });

@@ -73,6 +73,7 @@ export type TrainStops = TrainStop[];
 export type Train = {
   trainSummary: TrainSummary,
   trainStops: TrainStops,
+  enabled: boolean
 }
 
 export type Trains = Train[];

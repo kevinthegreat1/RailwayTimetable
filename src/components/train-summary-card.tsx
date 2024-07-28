@@ -1,12 +1,27 @@
+import {ChangeEventHandler} from "react";
 import {StationNames, Train} from "@/types";
 import {getStationName} from "@/utils/station-names";
 
-export function TrainSummaryCard({stationNames, train}: { stationNames: StationNames, train: Train }) {
+type TrainSummaryCardProps = {
+  stationNames: StationNames,
+  train: Train,
+  showDetail?: boolean,
+  enabledOption?: boolean,
+  enabledOptionCallback?: ChangeEventHandler<HTMLInputElement>,
+};
+
+export function TrainSummaryCard({stationNames, train, showDetail = true, enabledOption = false, enabledOptionCallback = () => {}}: TrainSummaryCardProps) {
   const {trainSummary, trainStops} = train;
 
   return (
     <div className="divide-y text-center divide-blue-200">
-      <div className="py-2">{trainSummary.station_train_code}</div>
+      <div className="py-2 flex items-center">
+        <div className="grow basis-0"></div>
+        <div className="text-lg">{trainSummary.station_train_code}</div>
+        <div className="grow basis-0">
+          {enabledOption && <input type="checkbox" checked={train.enabled} onChange={enabledOptionCallback} className=""/>}
+        </div>
+      </div>
       <div className="py-2 flex justify-evenly items-center">
         <div>
           <div>{trainSummary.start_time}</div>
@@ -20,7 +35,7 @@ export function TrainSummaryCard({stationNames, train}: { stationNames: StationN
           <div>终：{getStationName(stationNames, trainSummary.end_station_telecode)} ({trainSummary.end_station_telecode})</div>
         </div>
       </div>
-      <div className="py-2">
+      {showDetail && <div className="py-2">
         {trainStops.map((trainStop, index) =>
           <div key={index} className="flex justify-between items-center">
             <div>{trainStop.station_no}. {trainStop.station_name}</div>
@@ -28,7 +43,7 @@ export function TrainSummaryCard({stationNames, train}: { stationNames: StationN
             <div>{trainStop.stopover_time.endsWith("分钟") ? trainStop.stopover_time.substring(0, trainStop.stopover_time.length - 1) : trainStop.stopover_time}</div>
           </div>
         )}
-      </div>
+      </div>}
     </div>
   )
 }
